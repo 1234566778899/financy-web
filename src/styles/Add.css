@@ -1,0 +1,15 @@
+.content-form {
+    border: 1px solid #eaeaea;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    border-radius: 10px;
+
+}
+
+.content-form form {
+    width: 30%;
+}
+
+.form-input {
+    width: 100%;
+}

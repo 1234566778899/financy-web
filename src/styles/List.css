@@ -1,0 +1,17 @@
+.cont-table {
+    border: 1px solid #eaeaea;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+}
+
+table {
+    width: 100%;
+}
+
+table td {
+    padding: 10px 2px;
+}
+
+table tr {
+    border-bottom: 1px solid #D1D5DB;
+}
