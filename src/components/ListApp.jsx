@@ -36,8 +36,8 @@ export const ListApp = () => {
                     </thead>
                     <tbody>
                         {
-                            letters.map(x => (
-                                <tr>
+                            letters && letters.map(x => (
+                                <tr key={x._id}>
                                     <td>{x.number}</td>
                                     <td>{moment(x.issueDate).format('DD-MM-YYYY')}</td>
                                     <td>{moment(x.discountDate).format('DD-MM-YYYY')}</td>
