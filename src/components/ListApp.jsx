@@ -5,14 +5,33 @@ import { CONFIG } from '../config'
 import moment from 'moment'
 export const ListApp = () => {
     const [letters, setLetters] = useState([])
+    const [desembolso, setDesembolso] = useState(moment('2024-05-25').toDate())
     const getLetters = () => {
         axios.get(`${CONFIG.uri}/letter`)
             .then(res => {
-                setLetters(res.data)
+                updateList(res.data);
             })
             .catch(error => {
                 console.log(error);
             })
+    }
+    useEffect(() => {
+        updateList([...letters])
+    }, [desembolso]);
+    const updateList = (data) => {
+        setLetters(data.map(x => ({ ...x, dias: getDays(x.expirationDate), tasa: getTEA(x.rateType, x.rate, x.rateCap, x.capitalization), interes: getInteres(x.amount, getTEA(x.rateType, x.rate, x.rateCap, x.capitalization), getDays(x.expirationDate)), issueAdmin: x.admin * x.amount / 100, issueTransfer: x.amount * x.transfer / 100 })))
+    }
+    const getDays = (expiration) => {
+        const a = moment(expiration);
+        const b = moment(desembolso);
+        return a.diff(b, 'days');
+    }
+    const getTEA = (rateType, rate, rateCap, cap,) => {
+        const tee = rateType == 'Efectiva' ? rate : rate / rateCap * cap;
+        return rateType == 'Efectiva' ? (Math.pow(1 + tee / 100, 360 / rateCap) - 1) : (Math.pow(1 + tee / 100, 360 / cap) - 1);
+    }
+    const getInteres = (amount, tasa, dias) => {
+        return amount * (1 - (1 / Math.pow(1 + tasa, dias / 360)));
     }
     useEffect(() => {
         getLetters();
@@ -20,31 +39,53 @@ export const ListApp = () => {
     return (
         <div className='px-20'>
             <div className='cont-table'>
-                <span style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Letras y facturas</span>
-                <p className='mt-2' style={{ color: '#3D4151' }}>Total de letras y facturas registradas</p>
-                <table className='mt-10'>
+                <p className='mb-2' style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Letras y facturas</p>
+                <hr />
+                <div className='mt-3'>
+                    <div>
+                        <span style={{ fontWeight: 'bold' }}>Monto de planilla:</span>
+                        <span className='ms-2'>S/. 67049.00</span>
+                    </div>
+                    <div className='mt-2'>
+                        <span style={{ fontWeight: 'bold' }}>Fecha de reembolzo:</span>
+                        <input onChange={(e) => setDesembolso(e.target.value)} value={moment(desembolso).format('YYYY-MM-DD')} className='ms-2' type="date" style={{ padding: '3px 5px', border: '1px solid gray', borderRadius: '2px' }} />
+                    </div>
+                    <div className='mt-2'>
+                        <span style={{ fontWeight: 'bold' }}>Número de documentos:</span>
+                        <span className='ms-2'>{letters && letters.length}</span>
+                    </div>
+                </div>
+                <table className='mt-10 table table-rounded'>
                     <thead>
                         <tr>
-                            <td>Número de Letra</td>
-                            <td>Fecha de emisión</td>
-                            <td>Fecha de descuento</td>
-                            <td>Monto</td>
-                            <td>Moneda</td>
-                            <td>Tasa</td>
-                            <td>TCEA</td>
+                            <th>Detalles del documento</th>
+                            <th>Importe nominal</th>
+                            <th>Fecha de vencimiento</th>
+                            <th>Dias de adelanto</th>
+                            <th>Tasa</th>
+                            <th>Interés</th>
+                            <th>Comision por Admin. de Cartera</th>
+                            <th>Comision por Trans. de Fondos</th>
+                            <th>Portes</th>
+                            <th>Cargo total</th>
+                            <th>Neto a abonar</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            letters && letters.length > 0 && letters.map(x => (
-                                <tr key={x._id}>
+                            letters && letters.length > 0 && letters.map((x, idx) => (
+                                <tr key={idx}>
                                     <td>{x.number}</td>
-                                    <td>{moment(x.issueDate).format('DD-MM-YYYY')}</td>
-                                    <td>{moment(x.discountDate).format('DD-MM-YYYY')}</td>
-                                    <td>{x.amount}</td>
-                                    <td>{x.currency}</td>
-                                    <td>{x.rate}</td>
-                                    <td>{x.tcea}</td>
+                                    <td>S/. {x.amount}</td>
+                                    <td>{moment(x.expirationDate).format('DD/MM/YYYY')}</td>
+                                    <td>{x.dias}</td>
+                                    <td>{(x.tasa * 100).toFixed(2)}%</td>
+                                    <td>{(x.interes).toFixed(2)}</td>
+                                    <td>{x.issueAdmin.toFixed(2)}</td>
+                                    <td>{x.issueTransfer.toFixed(2)}</td>
+                                    <td>{x.portes}</td>
+                                    <td>{(x.interes + x.issueAdmin + x.issueTransfer + x.portes).toFixed(2)}</td>
+                                    <td>{(x.amount - (x.interes + x.issueAdmin + x.issueTransfer + x.portes)).toFixed(2)}</td>
                                 </tr>
                             ))
                         }

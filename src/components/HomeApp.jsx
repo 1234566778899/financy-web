@@ -30,10 +30,6 @@ export const HomeApp = () => {
             link: 'add'
         },
         {
-            title: 'Generar Reporte',
-            active: false
-        },
-        {
             title: 'Configuraciones',
             active: false
         },
