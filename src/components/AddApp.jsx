@@ -67,21 +67,20 @@ export const AddApp = () => {
                             <select
                                 {...register('rateType', { required: true })}
                                 required className='input-main'>
-                                <option value="Nominal">Nominal</option>
                                 <option value="Efectiva">Efectiva</option>
                             </select>
                             <select
-                                {...register('rateCap', { required: true })}
+                                {...register('rate', { required: true })}
                                 required className='ms-1 input-main'>
-                                <option value="1">Diaria</option>
-                                <option value="7">Semanal</option>
-                                <option value="15">Quincenal</option>
-                                <option value="30">Mensual</option>
-                                <option value="60">Bimestral</option>
-                                <option value="90">Trimestral</option>
-                                <option value="120">Cuatrimestral</option>
-                                <option value="180">Semestral</option>
-                                <option value="360">Anual</option>
+                                <option value="10">10%</option>
+                                <option value="20">20%</option>
+                                <option value="30">30%</option>
+                                <option value="40">40%</option>
+                                <option value="50">50%</option>
+                                <option value="60">60%</option>
+                                <option value="70">70%</option>
+                                <option value="80">80%</option>
+                                <option value="90">90%</option>
                             </select>
                         </div>
                     </div>
@@ -102,14 +101,6 @@ export const AddApp = () => {
                                 <option value="180">Semestral</option>
                                 <option value="360">Anual</option>
                             </select>
-                        </div>
-                    </div>
-                    <div className='mt-3'>
-                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Tasa de descuento</label>
-                        <div className="mt-1">
-                            <input
-                                {...register('rate', { required: true })}
-                                type="text" autoComplete="email" required className='input-main' />
                         </div>
                     </div>
                     <div className='mt-3'>

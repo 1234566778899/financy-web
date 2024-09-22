@@ -15,11 +15,6 @@ export const HomeApp = () => {
     }
     const [options, setoptions] = useState([
         {
-            title: 'Dashboard',
-            active: true,
-            link: 'dashboard'
-        },
-        {
             title: 'Administrar cartera',
             active: false,
             link: 'list'
@@ -28,11 +23,7 @@ export const HomeApp = () => {
             title: 'Agregar Letra/Factura',
             active: false,
             link: 'add'
-        },
-        {
-            title: 'Configuraciones',
-            active: false
-        },
+        }
     ])
     return (
         <div className='admin'>
