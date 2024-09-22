@@ -41,7 +41,7 @@ export const ListApp = () => {
         const b = moment(desembolso);
         return a.diff(b, 'days');
     }
-    const getTEA = (rateType, rate, rateCap, cap,) => {
+    const getTEA = (rateType, rate, rateCap, cap) => {
         const tee = rateType == 'Efectiva' ? rate : rate / rateCap * cap;
         return rateType == 'Efectiva' ? (Math.pow(1 + tee / 100, 360 / rateCap) - 1) : (Math.pow(1 + tee / 100, 360 / cap) - 1);
     }
@@ -75,12 +75,12 @@ export const ListApp = () => {
                         <thead>
                             <tr>
                                 <th>Detalles del documento</th>
-                                <th>Importe nominal</th>
+                                <th>Capital</th>
+                                <th>Fecha de emisión</th>
                                 <th>Fecha de vencimiento</th>
                                 <th>Dias de adelanto</th>
                                 <th>Tasa</th>
                                 <th>Interés</th>
-                                <th>Comision por Admin. de Cartera</th>
                                 <th>Comision por Trans. de Fondos</th>
                                 <th>Portes</th>
                                 <th>Cargo total</th>
@@ -93,11 +93,11 @@ export const ListApp = () => {
                                     <tr key={idx}>
                                         <td>{x.number}</td>
                                         <td>S/. {x.amount}</td>
+                                        <td>{moment(x.issueDate).format('DD/MM/YYYY')}</td>
                                         <td>{moment(x.expirationDate).format('DD/MM/YYYY')}</td>
                                         <td>{x.dias}</td>
                                         <td>{(x.tasa * 100).toFixed(2)}%</td>
                                         <td>{(x.interes).toFixed(2)}</td>
-                                        <td>{x.issueAdmin.toFixed(2)}</td>
                                         <td>{x.issueTransfer.toFixed(2)}</td>
                                         <td>{x.portes}</td>
                                         <td>{(x.interes + x.issueAdmin + x.issueTransfer + x.portes).toFixed(2)}</td>

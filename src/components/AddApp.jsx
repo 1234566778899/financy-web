@@ -11,7 +11,7 @@ export const AddApp = () => {
     const navigate = useNavigate();
     const handleRegister = (data) => {
         const date = moment(data.expirationDate);
-        axios.post(`${CONFIG.uri}/letter`, { ...data, expirationDate: date })
+        axios.post(`${CONFIG.uri}/letter`, { ...data, rateCap: 30, expirationDate: date })
             .then(res => {
                 navigate('/admin/list')
             })
