@@ -26,7 +26,7 @@ export const HomeApp = () => {
         }
     ])
     return (
-        <div className='admin'>
+        <div className='admin inter'>
             <header className="bg-white">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
                     <div className="flex lg:flex-1">
@@ -45,7 +45,7 @@ export const HomeApp = () => {
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                         <a href="#"
                             onClick={() => auth.signOut()}
-                            className="text-sm font-semibold leading-6 text-gray-900">Cerrar sesión<span aria-hidden="true">&rarr;</span></a>
+                            className="text-sm font-semibold leading-6 text-gray-900">Cerrar sesión<span className='ms-1' aria-hidden="true">&rarr;</span></a>
                     </div>
                 </nav>
             </header>

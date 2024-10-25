@@ -9,17 +9,23 @@ export const ListApp = () => {
     const [letters, setLetters] = useState([])
     const [desembolso, setDesembolso] = useState(moment('2024-05-25').toDate())
     const [tabConfirm, setTabConfirm] = useState({ active: false, id: '' });
+    const [isDeleting, setIsDeleting] = useState(false);
     const closeTabConfirm = () => setTabConfirm({ active: false, id: '' });
     const deleteLetter = () => {
-        axios.delete(`${CONFIG.uri}/letter/${tabConfirm.id}`)
-            .then(res => {
-                getLetters();
-                closeTabConfirm();
-                showInfoToast('Letra eliminada correctamente');
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        if (!isDeleting) {
+            setIsDeleting(true);
+            axios.delete(`${CONFIG.uri}/letter/${tabConfirm.id}`)
+                .then(res => {
+                    getLetters();
+                    closeTabConfirm();
+                    showInfoToast('Letra eliminada correctamente');
+                    setIsDeleting(false);
+                })
+                .catch(error => {
+                    setIsDeleting(false);
+                    console.log(error);
+                })
+        }
     }
     const getLetters = () => {
         axios.get(`${CONFIG.uri}/letter`)
@@ -89,7 +95,7 @@ export const ListApp = () => {
                         </thead>
                         <tbody>
                             {
-                                letters && letters.length > 0 && letters.map((x, idx) => (
+                                letters && letters.map((x, idx) => (
                                     <tr key={idx}>
                                         <td>{x.number}</td>
                                         <td>S/. {x.amount}</td>
@@ -115,7 +121,7 @@ export const ListApp = () => {
                 </div>
             </div>
             {
-                tabConfirm.active && (<ConfirmApp close={closeTabConfirm} fnConfirm={deleteLetter} />)
+                tabConfirm.active && (<ConfirmApp close={closeTabConfirm} fnConfirm={deleteLetter} isLoading={isDeleting} />)
             }
         </>
     )

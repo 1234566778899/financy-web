@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import '../styles/Add.css'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom';
@@ -9,15 +9,20 @@ import moment from 'moment';
 export const AddApp = () => {
     const { register, handleSubmit } = useForm();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const handleRegister = (data) => {
-        const date = moment(data.expirationDate);
-        axios.post(`${CONFIG.uri}/letter`, { ...data, rateCap: 30, expirationDate: date })
-            .then(res => {
-                navigate('/admin/list')
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        if (!isLoading) {
+            setIsLoading(true);
+            const date = moment(data.expirationDate);
+            axios.post(`${CONFIG.uri}/letter`, { ...data, rateCap: 30, expirationDate: date })
+                .then(res => {
+                    navigate('/admin/list')
+                })
+                .catch(error => {
+                    setIsLoading(false);
+                    console.log(error);
+                })
+        }
     }
 
     return (
@@ -146,7 +151,9 @@ export const AddApp = () => {
                 </div>
             </div>
             <div className='text-end'>
-                <button type="submit" className='btn-main mt-2'>Registrar</button>
+                <button type="submit" className='btn-main mt-2'>
+                    <span>{isLoading && (<i className="spinner fa-solid fa-spinner me-2"></i>)} Registrar</span>
+                </button>
             </div>
         </form>
     )
