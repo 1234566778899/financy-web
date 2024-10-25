@@ -14,7 +14,11 @@
     border: 1px solid rgb(170, 170, 170);
     border-radius: 3px;
     outline: none;
-    border-radius: 2px;
+    border-radius: 4px;
+}
+
+.input-main:focus {
+    border: 2px solid #4F46E5;
 }
 
 .btn-main {

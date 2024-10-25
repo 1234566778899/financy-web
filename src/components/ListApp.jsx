@@ -7,9 +7,10 @@ import { ConfirmApp } from './ConfirmApp'
 import { showInfoToast } from '../utils/showInfoToast'
 export const ListApp = () => {
     const [letters, setLetters] = useState([])
-    const [desembolso, setDesembolso] = useState(moment('2024-05-25').toDate())
+    const [desembolso, setDesembolso] = useState(moment().add(2, 'months').toDate())
     const [tabConfirm, setTabConfirm] = useState({ active: false, id: '' });
     const [isDeleting, setIsDeleting] = useState(false);
+    const [montoPlanilla, setMontoPlanilla] = useState(0);
     const closeTabConfirm = () => setTabConfirm({ active: false, id: '' });
     const deleteLetter = () => {
         if (!isDeleting) {
@@ -40,7 +41,10 @@ export const ListApp = () => {
         updateList([...letters])
     }, [desembolso]);
     const updateList = (data) => {
-        setLetters(data.map(x => ({ ...x, dias: getDays(x.expirationDate), tasa: getTEA(x.rateType, x.rate, x.rateCap, x.capitalization), interes: getInteres(x.amount, getTEA(x.rateType, x.rate, x.rateCap, x.capitalization), getDays(x.expirationDate)), issueAdmin: x.admin * x.amount / 100, issueTransfer: x.amount * x.transfer / 100 })))
+        const updatedLetters = data.map(x => ({ ...x, dias: getDays(x.expirationDate), tasa: getTEA(x.rateType, x.rate, x.rateCap, x.capitalization), interes: getInteres(x.amount, getTEA(x.rateType, x.rate, x.rateCap, x.capitalization), getDays(x.expirationDate)), issueAdmin: x.admin * x.amount / 100, issueTransfer: x.amount * x.transfer / 100 }))
+        setLetters(updatedLetters)
+        const totalMontoPlanilla = updatedLetters.reduce((acc, x) => acc + (x.amount - (x.interes + x.issueAdmin + x.issueTransfer + x.portes)), 0);
+        setMontoPlanilla(totalMontoPlanilla);
     }
     const getDays = (expiration) => {
         const a = moment(expiration);
@@ -66,7 +70,7 @@ export const ListApp = () => {
                     <div className='mt-3'>
                         <div>
                             <span style={{ fontWeight: 'bold' }}>Monto de planilla:</span>
-                            <span className='ms-2'>S/. 67049.00</span>
+                            <span className='ms-2'>S/. {montoPlanilla ? montoPlanilla.toFixed(2) : '0'}</span>
                         </div>
                         <div className='mt-2'>
                             <span style={{ fontWeight: 'bold' }}>Fecha de reembolzo:</span>
