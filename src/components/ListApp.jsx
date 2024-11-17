@@ -6,7 +6,7 @@ import moment from 'moment'
 import { ConfirmApp } from './ConfirmApp'
 import { showInfoToast } from '../utils/showInfoToast'
 export const ListApp = () => {
-    const [letters, setLetters] = useState([])
+    const [letters, setLetters] = useState(null)
     const [desembolso, setDesembolso] = useState(moment('2024-05-25'))
     const [tabConfirm, setTabConfirm] = useState({ active: false, id: '' });
     const [isDeleting, setIsDeleting] = useState(false);
@@ -38,7 +38,9 @@ export const ListApp = () => {
             })
     }
     useEffect(() => {
-        updateList([...letters])
+        if (letters) {
+            updateList([...letters])
+        }
     }, [desembolso]);
     const updateList = (data) => {
         setMontoPlanilla(data.reduce((acumlador, item) => acumlador + item.valor, 0));
@@ -62,6 +64,13 @@ export const ListApp = () => {
     useEffect(() => {
         getLetters();
     }, [])
+    if (!letters) {
+        return (
+            <div className='flex justify-center items-center bg-slate-400'>
+                <h1>Cargando..</h1>
+            </div>
+        )
+    }
     return (
         <>
             <div className='px-20'>
@@ -118,7 +127,7 @@ export const ListApp = () => {
                                             <td>{x.adelanto}</td>
                                             <td>{(x.tasa)}%</td>
                                             <td>{(x.te * 100).toFixed(2)}%</td>
-                                            <td>{x.comisionAdmin}</td>
+                                            <td>{x.comisionAdmin.toFixed(2)}</td>
                                             <td>{(x.td * 100).toFixed(2)}%</td>
                                             <td>{(x.comisionTransferencia.toFixed(2))}</td>
                                             <td>{x.portes}</td>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../styles/Add.css'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom';
@@ -7,13 +7,13 @@ import { CONFIG } from '../config';
 import moment from 'moment';
 
 export const AddApp = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm();
     const navigate = useNavigate();
-    const [bank, setbank] = useState({ tasa: 44.92, transferencia: 0.5, portes: 7.50, seguro: 0.028, admin: 0.55 });
+    const [bank, setbank] = useState({ tasa: 0, transferencia: 0, portes: 0, seguro: 0, admin: 0 });
     const [isLoading, setIsLoading] = useState(false);
     const banks = {
         'IBK': { tasa: 44.92, transferencia: 0.5, portes: 7.50, seguro: 0.028, admin: 0.55 },
-        'SBK': { tasa: 24, transferencia: 0.5, portes: 6.50, seguro: 0.1995, admin: 0.55 },
+        'SBK': { tasa: 24, transferencia: 0.5, portes: 6.5, seguro: 0.1995, admin: 0.55 },
         'BBVA': { tasa: 32, transferencia: 0.5, portes: 3.5, seguro: 0.069, admin: 0.55 },
         'BCP': { tasa: 32, transferencia: 0.5, portes: 3.5, seguro: 0.115, admin: 0.55 },
     }
@@ -32,6 +32,13 @@ export const AddApp = () => {
             });
 
     }
+    useEffect(() => {
+        setValue('tasa', bank.tasa);
+        setValue('transferencia', bank.transferencia);
+        setValue('portes', bank.portes);
+        setValue('seguro', bank.seguro);
+        setValue('admin', bank.admin);
+    }, [bank]);
     return (
         <form onSubmit={handleSubmit(handleRegister)} className='px-20'>
             <br />
@@ -93,6 +100,7 @@ export const AddApp = () => {
                                 onChange={(e) => setbank(banks[e.target.value])}
                                 className='input-main'
                             >
+                                <option value=""></option>
                                 <option value="IBK">Interbank</option>
                                 <option value="SBK">Scotiabank</option>
                                 <option value="BBVA">BBVA</option>
@@ -105,7 +113,6 @@ export const AddApp = () => {
                         <label className="block text-sm font-medium leading-6 text-gray-900">Tasa de Descuento Efectiva (MN)</label>
                         <div className="mt-1" style={{ display: 'flex' }}>
                             <input
-                                value={bank.tasa}
                                 {...register('tasa', { required: true })}
                                 type="text"
                                 className='input-main'
@@ -133,10 +140,9 @@ export const AddApp = () => {
                         <label className="block text-sm font-medium leading-6 text-gray-900">Administración de cartera (%)</label>
                         <div className="mt-1">
                             <input
-                                value={bank.admin}
                                 {...register('admin', { required: true, valueAsNumber: true })}
                                 type="number"
-                                step="0.01"
+                                step="0.0001"
                                 className='input-main'
                             />
                             {errors.admin && <span className="text-red-500 text-sm">Este campo es requerido y debe ser un número</span>}
@@ -146,10 +152,9 @@ export const AddApp = () => {
                         <label className="block text-sm font-medium leading-6 text-gray-900">Transferencia de fondos (%)</label>
                         <div className="mt-1">
                             <input
-                                value={bank.transferencia}
                                 {...register('transferencia', { required: true, valueAsNumber: true })}
                                 type="number"
-                                step="0.01"
+                                step="0.0001"
                                 className='input-main'
                             />
                             {errors.transfer && <span className="text-red-500 text-sm">Este campo es requerido y debe ser un número</span>}
@@ -159,10 +164,9 @@ export const AddApp = () => {
                         <label className="block text-sm font-medium leading-6 text-gray-900">Portes</label>
                         <div className="mt-1">
                             <input
-                                value={bank.portes}
                                 {...register('portes', { required: true, valueAsNumber: true })}
                                 type="number"
-                                step="0.01"
+                                step="0.0001"
                                 className='input-main'
                             />
                             {errors.portes && <span className="text-red-500 text-sm">Este campo es requerido y debe ser un número</span>}
@@ -174,8 +178,7 @@ export const AddApp = () => {
                             <input
                                 {...register('seguro', { required: true, valueAsNumber: true })}
                                 type="number"
-                                step="0.01"
-                                value={bank.seguro}
+                                step="0.0001"
                                 className='input-main'
                             />
                             {errors.seguro && <span className="text-red-500 text-sm">Este campo es requerido y debe ser un número</span>}
