@@ -45,7 +45,7 @@ export const ListApp = () => {
     const updateList = (data) => {
         setMontoPlanilla(data.reduce((acumlador, item) => acumlador + item.valor, 0));
         const result = [...data].map(item => {
-            item.adelanto = moment(item.vencimiento).diff(desembolso, 'days') + 1;
+            item.adelanto = moment(item.vencimiento).diff(desembolso, 'days');
             item.te = Math.pow(1 + (item.tasa / 100), item.adelanto / 360) - 1;
             item.comisionAdmin = item.valor * item.admin / 100;
             item.comisionTransferencia = item.valor * item.transferencia / 100;
@@ -56,7 +56,7 @@ export const ListApp = () => {
             item.seg = (item.seguro / 100) * item.valor * (item.adelanto / 30);
             item.recibido = item.neto - item.comisionTransferencia - item.portes;
             item.entregado = item.seg + item.comisionTransferencia + item.portes + item.valor;
-            item.tcea = Math.pow(item.entregado / item.recibido, 360 / (item.tasa / 100)) - 1;
+            item.tcea = Math.pow(item.entregado / item.recibido, 360 / (item.adelanto)) - 1;
             return item;
         })
         setLetters(result);
@@ -137,7 +137,7 @@ export const ListApp = () => {
                                             <td>{x.seg.toFixed(2)}</td>
                                             <td>{x.recibido.toFixed(2)}</td>
                                             <td>{x.entregado.toFixed(2)}</td>
-                                            <td>{x.tcea.toFixed(2)}</td>
+                                            <td>{(x.tcea * 100).toFixed(2)}%</td>
                                             <td>
                                                 <button
                                                     onClick={() => setTabConfirm({ active: true, id: x._id })}

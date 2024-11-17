@@ -21,7 +21,7 @@ export const AddApp = () => {
         if (isLoading) return;
         setIsLoading(true);
         axios.post(`${CONFIG.uri}/letter`, {
-            ...data
+            ...data, emision: moment(data.emision), vencimiento: moment(data.vencimiento)
         })
             .then(() => {
                 navigate('/admin/list');
