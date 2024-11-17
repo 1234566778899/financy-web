@@ -97,7 +97,7 @@ export const AddApp = () => {
                         <div className="mt-1" style={{ display: 'flex' }}>
                             <select
                                 id="banco"
-                                onChange={(e) => setbank(banks[e.target.value])}
+                                onChange={(e) => setbank(banks[e.target.value] || {})}
                                 className='input-main'
                             >
                                 <option value=""></option>
