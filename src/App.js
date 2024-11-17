@@ -6,7 +6,6 @@ import { AuthContextApp } from './contexts/AuthContextApp';
 import { getAuth } from 'firebase/auth';
 import { RegisterApp } from './components/RegisterApp';
 import { HomeApp } from './components/HomeApp';
-import { DashboardApp } from './components/DashboardApp';
 import { ListApp } from './components/ListApp';
 import { AddApp } from './components/AddApp';
 
@@ -21,8 +20,7 @@ function App() {
             <Route exact path='/login' element={<LoginApp />} />
             <Route exact path='/register' element={<RegisterApp />} />
             <Route exact path='/admin' element={<HomeApp />}>
-              <Route path='' element={<DashboardApp />} />
-              <Route path='dashboard' element={<DashboardApp />} />
+              <Route path='' element={<ListApp />} />
               <Route path='list' element={<ListApp />} />
               <Route path='add' element={<AddApp />} />
             </Route>

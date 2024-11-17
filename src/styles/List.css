@@ -42,9 +42,9 @@ table tr {
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
-
-.tab-confirm button {
-    padding: 7px 14px;
-    border: 1px solid gray;
-    border-radius: 3px;
+button{
+    transition: filter 0.3s ease;
+}
+button:hover{
+    filter: brightness(1.1);
 }
